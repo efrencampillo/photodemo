@@ -21,6 +21,9 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 
+/**
+ * this activity shows the description of the post taht we clicked in the Home Activity
+ */
 public class DetailsActivity extends AppCompatActivity {
 
     @Inject

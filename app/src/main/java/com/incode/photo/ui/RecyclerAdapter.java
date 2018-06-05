@@ -11,20 +11,23 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
 import com.incode.photo.R;
-import com.incode.photo.core.PhotoApp;
 import com.incode.photo.model.Post;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+
+/**
+ this Adapter handles the post retrieved from internet, and display into the recyclerview
+ */
 public class RecyclerAdapter extends RecyclerView.Adapter {
 
-    private List<Post> posts;
+    private HashMap<Integer, Post> posts;
 
     RequestManager manager;
 
     RecyclerAdapter(RequestManager manager) {
-        posts = new ArrayList<>();
+        posts = new HashMap<>();
         this.manager = manager;
     }
 
@@ -46,9 +49,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
     }
 
     public void addItems(List<Post> newItems) {
-        int position = posts.size();
-        posts.addAll(newItems);
-        notifyItemInserted(position);
+        //replacing items with same Id
+        for(Post post: newItems)
+        posts.put(post.id, post);
+        notifyItemInserted(posts.size());
     }
 
     class PostViewHolder extends RecyclerView.ViewHolder {
