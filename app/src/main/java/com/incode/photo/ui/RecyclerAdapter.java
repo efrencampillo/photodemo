@@ -67,7 +67,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
         }
 
         void bind(Post post) {
-            title.setText(post.title);
+            if(post == null) return;
+            title.setText(""+post.title);
             manager.load(post.photo).asBitmap()
                     .signature(new StringSignature(String.valueOf(System.currentTimeMillis())))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)

@@ -11,11 +11,14 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.incode.photo.R;
 
@@ -52,26 +55,42 @@ public class AddPostActivity extends AppCompatActivity {
         comment = findViewById(R.id.post_comment);
         createdAt = findViewById(R.id.post_created);
 
-        if (android.os.Build.VERSION.SDK_INT > 22) {
-            if (!(ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_RESULT);
-            }
-        }
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
+            if (capturedImageUri == null) {
+                Toast.makeText(AddPostActivity.this, "take a picture please.", Toast.LENGTH_SHORT).show();
+                return;
+            }
             Intent i = new Intent();
             i.putExtra("id", postId.getText());
             i.putExtra("photo", capturedImageUri.toString());
             i.putExtra("title", title.getText());
             i.putExtra("comment", comment.getText());
             i.putExtra("publishedAt", createdAt.getText());
+
             setResult(RESULT_OK, i);
+            finish();
         });
 
+        checkPermissions();
+    }
 
+    private void checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+            } else {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PERMISSION_RESULT);
+            }
+        }
     }
 
     public static void startActivityForResult(Activity context, int postId) {
@@ -80,27 +99,37 @@ public class AddPostActivity extends AppCompatActivity {
         context.startActivityForResult(i, CREATE_POST);
     }
 
-    private void dispatchTakenPictureIntent() {
+
+    private File createFile() throws IOException {
         File file = new File(Environment.getExternalStorageDirectory(),
                 (Calendar.getInstance().getTimeInMillis() + ".jpg"));
         if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            file.createNewFile();
         } else {
             file.delete();
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            file.createNewFile();
         }
-        capturedImageUri = Uri.fromFile(file);
-        Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        i.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
-        startActivityForResult(i, TAKE_PICTURE_RESULT);
+        return file;
+    }
+
+    private void dispatchTakenPictureIntent() {
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            try {
+                File photoFile = createFile();
+                String path = photoFile.getAbsolutePath();
+                capturedImageUri = FileProvider.getUriForFile(this,
+                        "com.incode.photo.provider",
+                        photoFile);
+
+            } catch (IOException ex) {
+                //Log.e("TakePicture", ex.getMessage());
+            }
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
+            startActivityForResult(takePictureIntent, TAKE_PICTURE_RESULT);
+        }
+
     }
 
     @Override
@@ -120,8 +149,7 @@ public class AddPostActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_RESULT) {
             if (grantResults.length > 0 &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                    grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             } else {
                 finish();
             }
