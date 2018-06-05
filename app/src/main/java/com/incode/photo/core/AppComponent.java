@@ -15,5 +15,4 @@ public interface AppComponent {
     void inject(HomeActivity activity);
 
     void inject(DetailsActivity activity);
-    void inject(RecyclerAdapter adapter);
 }

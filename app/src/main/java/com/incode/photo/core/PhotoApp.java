@@ -11,7 +11,7 @@ public class PhotoApp extends Application {
     public void onCreate() {
         super.onCreate();
         mThis = this;
-        appComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
+        appComponent = DaggerAppComponent.builder().appModule(new AppModule()).build();
     }
 
 

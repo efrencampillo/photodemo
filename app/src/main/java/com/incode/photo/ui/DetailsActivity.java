@@ -4,8 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
 import com.incode.photo.R;
 import com.incode.photo.core.PhotoApp;
 import com.incode.photo.model.Post;
@@ -20,10 +26,9 @@ public class DetailsActivity extends AppCompatActivity {
     @Inject
     DetailsPresenter mDetailsPresenter;
 
-    @Inject
-    RequestManager glide;
-
     private CompositeDisposable disposables;
+
+    private ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,7 @@ public class DetailsActivity extends AppCompatActivity {
         PhotoApp.getInstance().getAppComponent().inject(this);
         mDetailsPresenter.setPost(getPostFromIntent());
         disposables = new CompositeDisposable();
+        image = findViewById(R.id.detail_img);
     }
 
     @Override
@@ -42,7 +48,14 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void setPostOnUI() {
         Post post = mDetailsPresenter.getPost();
-        //todo set on UI
+        ((TextView) findViewById(R.id.post_id)).setText("" + post.id);
+        ((TextView) findViewById(R.id.title)).setText(post.title);
+        ((TextView) findViewById(R.id.comment)).setText(post.comment);
+        ((TextView) findViewById(R.id.published)).setText(post.publishedAt);
+        Glide.with(this).load(post.photo).asBitmap()
+                .signature(new StringSignature(String.valueOf(System.currentTimeMillis())))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true).into(image);
     }
 
     private Post getPostFromIntent() {
@@ -60,7 +73,7 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         disposables.clear();
-        glide.onStop();
+        Glide.get(this).clearMemory();
     }
 
 

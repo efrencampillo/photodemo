@@ -17,18 +17,15 @@ import com.incode.photo.model.Post;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 public class RecyclerAdapter extends RecyclerView.Adapter {
 
     private List<Post> posts;
 
-    @Inject
-    RequestManager mManager;
+    RequestManager manager;
 
-    RecyclerAdapter() {
+    RecyclerAdapter(RequestManager manager) {
         posts = new ArrayList<>();
-        PhotoApp.getInstance().getAppComponent().inject(this);
+        this.manager = manager;
     }
 
     @Override
@@ -58,6 +55,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
         private ImageView img;
         private TextView title;
 
+
         PostViewHolder(View itemView) {
             super(itemView);
             img = itemView.findViewById(R.id.img);
@@ -66,7 +64,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
 
         void bind(Post post) {
             title.setText(post.title);
-            mManager.load(post.photo).asBitmap()
+            manager.load(post.photo).asBitmap()
                     .signature(new StringSignature(String.valueOf(System.currentTimeMillis())))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true).into(img);
@@ -75,7 +73,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
     }
 
     public void stopRequests() {
-        mManager.onStop();
+        manager.onStop();
     }
 
 }

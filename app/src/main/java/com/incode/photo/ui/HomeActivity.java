@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.incode.photo.R;
 import com.incode.photo.core.PhotoApp;
@@ -42,13 +43,12 @@ public class HomeActivity extends AppCompatActivity {
 
         mRecyclerView = findViewById(R.id.recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerAdapter = new RecyclerAdapter();
+        mRecyclerAdapter = new RecyclerAdapter(Glide.with(this));
         mRecyclerView.setAdapter(mRecyclerAdapter);
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener((View view) ->
-                Snackbar.make(view, getString(R.string.new_post), Snackbar.LENGTH_LONG)
-                        // .setAction("Action", )
-                        .show());
+        fab.setOnClickListener((View view) -> {
+            //TODO start take picture activity
+        });
         disposables = new CompositeDisposable();
     }
 

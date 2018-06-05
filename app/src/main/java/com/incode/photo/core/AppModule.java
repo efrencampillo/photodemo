@@ -19,18 +19,6 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 @Module
 public class AppModule {
 
-    private PhotoApp mPhotoApp;
-
-    public AppModule(PhotoApp app) {
-        this.mPhotoApp = app;
-    }
-
-    @Singleton
-    @Provides
-    PhotoApp provideApplication() {
-        return mPhotoApp;
-    }
-
     @Provides
     @Singleton
     Retrofit provideRetrofit() {
@@ -67,11 +55,6 @@ public class AppModule {
         return new DetailsPresenter();
     }
 
-    @Provides
-    @Singleton
-    RequestManager provideGlide(PhotoApp app){
-        return Glide.with(app);
-    }
 
 
 }
