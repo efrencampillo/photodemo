@@ -25,6 +25,7 @@ import com.incode.photo.R;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Activity to create new post to display in home
@@ -60,6 +61,8 @@ public class AddPostActivity extends AppCompatActivity {
         title = findViewById(R.id.post_title);
         comment = findViewById(R.id.post_comment);
         createdAt = findViewById(R.id.post_created);
+        //TODO pass to ISO 8601, not required to change it
+        createdAt.setText(new Date().toString());
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
