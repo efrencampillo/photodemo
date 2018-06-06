@@ -69,8 +69,11 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK && requestCode == AddPostActivity.CREATE_POST) {
             Post post = getPostFromIntent(data);
+            if (post.photo != null) {
+                mRecyclerAdapter.addItem(post);
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

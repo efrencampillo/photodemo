@@ -38,6 +38,7 @@ public class AddPostActivity extends AppCompatActivity {
     private EditText comment;
 
     private Uri capturedImageUri;
+    private int newPostId = 0;
 
     public static final int PERMISSION_RESULT = 101;
     public static final int TAKE_PICTURE_RESULT = 102;
@@ -51,6 +52,11 @@ public class AddPostActivity extends AppCompatActivity {
         takedPciture = findViewById(R.id.image_taked);
         takedPciture.setOnClickListener(v -> dispatchTakenPictureIntent());
         postId = findViewById(R.id.post_id);
+        Intent intent = getIntent();
+        if (intent != null) {
+            newPostId = intent.getIntExtra("postId", 0);
+        }
+        postId.setText("" + newPostId);
         title = findViewById(R.id.post_title);
         comment = findViewById(R.id.post_comment);
         createdAt = findViewById(R.id.post_created);
@@ -63,10 +69,10 @@ public class AddPostActivity extends AppCompatActivity {
                 return;
             }
             Intent i = new Intent();
-            i.putExtra("id", postId.getText());
+            i.putExtra("id", newPostId);
             i.putExtra("photo", capturedImageUri.toString());
-            i.putExtra("title", title.getText());
-            i.putExtra("comment", comment.getText());
+            i.putExtra("title", title.getText().toString());
+            i.putExtra("comment", comment.getText().toString());
             i.putExtra("publishedAt", createdAt.getText());
 
             setResult(RESULT_OK, i);
@@ -74,6 +80,7 @@ public class AddPostActivity extends AppCompatActivity {
         });
 
         checkPermissions();
+        Toast.makeText(AddPostActivity.this, "tap on the picture to add", Toast.LENGTH_SHORT).show();
     }
 
     private void checkPermissions() {

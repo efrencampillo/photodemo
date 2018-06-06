@@ -1,47 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.DetailsActivity"
-    tools:showIn="@layout/activity_details">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/detail_img"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher_round" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".ui.DetailsActivity"
+        tools:showIn="@layout/activity_details">
 
-    <TextView
-        android:id="@+id/post_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:background="#DDDDDD"
-        android:textColor="@android:color/black"/>
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:background="#DDDDDD"
-        android:textColor="@android:color/black"/>
-    <TextView
-        android:id="@+id/comment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:background="#DDDDDD"
-        android:textColor="@android:color/black"/>
-    <TextView
-        android:id="@+id/published"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:background="#DDDDDD"
-        android:textColor="@android:color/black"/>
+        <ImageView
+            android:id="@+id/detail_img"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher_round" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/post_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#DDDDDD"
+            android:padding="8dp"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#DDDDDD"
+            android:padding="8dp"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#DDDDDD"
+            android:padding="8dp"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/published"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#DDDDDD"
+            android:padding="8dp"
+            android:textColor="@android:color/black" />
+
+    </LinearLayout>
+</ScrollView>

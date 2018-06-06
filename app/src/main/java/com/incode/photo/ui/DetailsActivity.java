@@ -56,6 +56,8 @@ public class DetailsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.comment)).setText(post.comment);
         ((TextView) findViewById(R.id.published)).setText(post.publishedAt);
         Glide.with(this).load(post.photo).asBitmap()
+                ///as url are the same for all, we need to identify each one,
+                ///we cant keep all in memory cause it will overheap the memory
                 .signature(new StringSignature(String.valueOf(System.currentTimeMillis())))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true).into(image);
