@@ -12,4 +12,5 @@ public interface NetworkInterface {
 
     @GET("photo")
     Observable<List<Post>> getPhotos();
+
 }

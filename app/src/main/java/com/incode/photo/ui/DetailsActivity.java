@@ -4,22 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.signature.StringSignature;
 import com.incode.photo.R;
 import com.incode.photo.core.PhotoApp;
 import com.incode.photo.model.Post;
 import com.incode.photo.presenters.DetailsPresenter;
 
 import javax.inject.Inject;
-
-import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * this activity shows the description of the post taht we clicked in the Home Activity
@@ -29,8 +23,6 @@ public class DetailsActivity extends AppCompatActivity {
     @Inject
     DetailsPresenter mDetailsPresenter;
 
-    private CompositeDisposable disposables;
-
     private ImageView image;
 
     @Override
@@ -39,7 +31,6 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details);
         PhotoApp.getInstance().getAppComponent().inject(this);
         mDetailsPresenter.setPost(getPostFromIntent());
-        disposables = new CompositeDisposable();
         image = findViewById(R.id.detail_img);
     }
 
@@ -55,12 +46,7 @@ public class DetailsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.title)).setText(post.title);
         ((TextView) findViewById(R.id.comment)).setText(post.comment);
         ((TextView) findViewById(R.id.published)).setText(post.publishedAt);
-        Glide.with(this).load(post.photo).asBitmap()
-                ///as url are the same for all, we need to identify each one,
-                ///we cant keep all in memory cause it will overheap the memory
-                .signature(new StringSignature(String.valueOf(System.currentTimeMillis())))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true).into(image);
+        Glide.with(this).load(post.photo).into(image);
     }
 
     private Post getPostFromIntent() {
@@ -77,7 +63,6 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        disposables.clear();
         Glide.get(this).clearMemory();
     }
 

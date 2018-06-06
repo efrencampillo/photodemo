@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -54,8 +55,9 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mHomePresenter.getFeed().subscribe(mRecyclerAdapter::addItems,
-                error -> Toast.makeText(this, "error at try to get feed", Toast.LENGTH_SHORT).show());
+        disposables.add(mHomePresenter.getFeed().subscribe(
+                itemList ->  mRecyclerAdapter.addItems(itemList),
+                error -> Toast.makeText(this, "error at try to get feed", Toast.LENGTH_SHORT).show()));
 
     }
 
