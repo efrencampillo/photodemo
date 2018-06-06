@@ -10,6 +10,12 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ *
+ * Home presenter is the broker between the ui and the network requests,
+ * saves temporaly the information cause t here is no repository yet
+ */
+
 public class HomePresenter {
 
     private NetworkInterface mNetworkInterface;

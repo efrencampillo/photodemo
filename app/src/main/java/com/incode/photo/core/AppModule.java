@@ -1,10 +1,7 @@
 package com.incode.photo.core;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.incode.photo.presenters.DetailsPresenter;
 import com.incode.photo.presenters.HomePresenter;
-
 
 import javax.inject.Singleton;
 
@@ -54,7 +51,6 @@ public class AppModule {
     DetailsPresenter provideMovementsPresenter() {
         return new DetailsPresenter();
     }
-
 
 
 }
