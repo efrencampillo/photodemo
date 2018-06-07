@@ -32,8 +32,7 @@ import java.util.Date;
  */
 public class AddPostActivity extends AppCompatActivity {
 
-    private ImageView takedPciture;
-    private TextView postId;
+    private ImageView tookPicture;
     private TextView createdAt;
     private EditText title;
     private EditText comment;
@@ -50,9 +49,9 @@ public class AddPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
 
-        takedPciture = findViewById(R.id.image_taked);
-        takedPciture.setOnClickListener(v -> dispatchTakenPictureIntent());
-        postId = findViewById(R.id.post_id);
+        tookPicture = findViewById(R.id.image_taked);
+        tookPicture.setOnClickListener(v -> dispatchTakenPictureIntent());
+        TextView postId = findViewById(R.id.post_id);
         Intent intent = getIntent();
         if (intent != null) {
             newPostId = intent.getIntExtra("postId", 0);
@@ -91,10 +90,8 @@ public class AddPostActivity extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-            } else {
 
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -128,13 +125,12 @@ public class AddPostActivity extends AppCompatActivity {
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             try {
                 File photoFile = createFile();
-                String path = photoFile.getAbsolutePath();
                 capturedImageUri = FileProvider.getUriForFile(this,
                         "com.incode.photo.provider",
                         photoFile);
 
             } catch (IOException ex) {
-                //Log.e("TakePicture", ex.getMessage());
+                //TODO handling error
             }
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
             startActivityForResult(takePictureIntent, TAKE_PICTURE_RESULT);
@@ -147,7 +143,7 @@ public class AddPostActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == TAKE_PICTURE_RESULT) {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), capturedImageUri);
-                takedPciture.setImageBitmap(bitmap);
+                tookPicture.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -158,8 +154,8 @@ public class AddPostActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_RESULT) {
-            if (grantResults.length > 0 &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //all is ok, go ahead
             } else {
                 finish();
             }

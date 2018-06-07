@@ -1,7 +1,5 @@
 package com.incode.photo.presenters;
 
-import android.util.Log;
-
 import com.incode.photo.core.NetworkInterface;
 import com.incode.photo.model.Post;
 
@@ -33,16 +31,16 @@ public class HomePresenter {
     public Observable<List<Post>> getFeed() {
         return mNetworkInterface.getPhotos()
                 .map(posts -> {
-                    //TODO validate saved locally
+                    //TODO imprive the way to save this cause there is no repository yet
                     for (Post post : posts) {
-                        //TODO unharcode this
+                        //TODO unharcode this process
                         URL url = new URL(post.photo);
                         HttpURLConnection ucon = (HttpURLConnection) url.openConnection();
                         ucon.setInstanceFollowRedirects(false);
                         URL url2 = new URL(ucon.getHeaderField("Location"));
                         HttpURLConnection ucon2 = (HttpURLConnection) url2.openConnection();
                         ucon2.setInstanceFollowRedirects(false);
-                        post.photo = url2.getProtocol()+"://"+url2.getHost()+ucon2.getHeaderField("Location");
+                        post.photo = url2.getProtocol() + "://" + url2.getHost() + ucon2.getHeaderField("Location");
                     }
                     mList = posts;
                     return mList;

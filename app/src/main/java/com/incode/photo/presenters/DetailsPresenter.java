@@ -9,7 +9,7 @@ import com.incode.photo.model.Post;
 
 public class DetailsPresenter {
 
-    Post mCurrentPost = null;
+    private Post mCurrentPost = null;
 
     public DetailsPresenter() {
 

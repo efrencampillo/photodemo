@@ -39,7 +39,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         PostViewHolder moveHolder = (PostViewHolder) holder;
         //binding by index in linkedHashMap
         List<Post> postList = new ArrayList<>(posts.values());
